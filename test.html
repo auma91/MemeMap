@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>MemeMap</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 95%;
+      }
+
+      #darkoverlay {
+        position: fixed; /* Sit on top of the page content */
+        display: none; /* Hidden by default */
+        width: 100%; /* Full width (cover the whole page) */
+        height: 100%; /* Full height (cover the whole page) */
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+        z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+        cursor: pointer; /* Add a pointer on hover */
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        margin: 0;
+        font-family: Arial;
+      }
+
+      .gm-style-mtc {
+          display: none;
+      }
+
+      .gm-control-active{
+        display: none;
+      }
+
+      .gm-svpc{
+          display: none;
+      }
+      .gm-bundled-control{
+          display: none;
+      }
+
+      .topnav {
+        background-color: #444343;
+        overflow: hidden;
+      }
+      .topnav a {
+        float: right;
+        color: #f2f2f2;
+        text-align: center;
+        padding: 20px 20px;
+        text-decoration: none;
+        font-size: 20px;
+      }
+      .topnav a.active {
+        background-color: #bfb3ac;
+        color: white;
+      }
+      .topnav a:hover {
+        background-color: #ddd;
+        color: black;
+      }
+    </style>
+  </head>
+
+
+
+  <body style="background-color:262626" onload="getLocation()">
+    <div class="topnav">
+        <img class = "a" src="logo.png" width = "5%" height = "auto">
+        <a class="active" href="#home">About Us</a>
+      </div>
+    <div id="map"></div>
+    <span class="metadata-marker" style="display: none;" data-region_tag="script-body"></span>
+    <script>
+      var map;
+      var latitude= 30;
+      var longitude = 50;
+      function darkon() {
+        document.getElementById("darkoverlay").style.display = "block";
+      }
+      function darkoff() {
+        document.getElementById("darkoverlay").style.display = "none";
+      }
+      function getLocation() {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(showPosition);
+        }
+        else {
+          //x.innerHTML = "Geolocation is not supported by this browser.";
+        }
+      }
+      function showPosition(position) {
+        latitude = position.coords.latitude;
+        longitude = position.coords.longitude;
+        initMap();
+      }
+      function initMap() {
+        var uluru = {lat: 40.004909, lng: -105.273347};
+        map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 13,
+          center: {lat: latitude, lng: longitude},
+          styles: [
+            {elementType: 'geometry', stylers: [{color: '#242f3e'}]},
+            {elementType: 'labels.text.stroke', stylers: [{color: '#242f3e'}]},
+            {elementType: 'labels.text.fill', stylers: [{color: '#746855'}]},
+            {
+              featureType: 'administrative.locality',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#d59563'}]
+            },
+            {
+              featureType: 'poi',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#d59563'}]
+            },
+            {
+              featureType: 'poi.park',
+              elementType: 'geometry',
+              stylers: [{color: '#263c3f'}]
+            },
+            {
+              featureType: 'poi.park',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#6b9a76'}]
+            },
+            {
+              featureType: 'road',
+              elementType: 'geometry',
+              stylers: [{color: '#38414e'}]
+            },
+            {
+              featureType: 'road',
+              elementType: 'geometry.stroke',
+              stylers: [{color: '#212a37'}]
+            },
+            {
+              featureType: 'road',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#9ca5b3'}]
+            },
+            {
+              featureType: 'road.highway',
+              elementType: 'geometry',
+              stylers: [{color: '#746855'}]
+            },
+            {
+              featureType: 'road.highway',
+              elementType: 'geometry.stroke',
+              stylers: [{color: '#1f2835'}]
+            },
+            {
+              featureType: 'road.highway',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#f3d19c'}]
+            },
+            {
+              featureType: 'transit',
+              elementType: 'geometry',
+              stylers: [{color: '#2f3948'}]
+            },
+            {
+              featureType: 'transit.station',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#d59563'}]
+            },
+            {
+              featureType: 'water',
+              elementType: 'geometry',
+              stylers: [{color: '#17263c'}]
+            },
+            {
+              featureType: 'water',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#515c6d'}]
+            },
+            {
+              featureType: 'water',
+              elementType: 'labels.text.stroke',
+              stylers: [{color: '#17263c'}]
+            }
+          ]
+        });
+        var marker = new google.maps.Marker({
+          position: uluru,
+          map: map,
+          //icon: 'logo.png'
+          title: 'Click to darken'
+        });
+        //infoWindow = new google.maps.InfoWindow;
+        marker.addListener('click', function() {
+          darkon();
+        });
+      }
+
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC1rjX1qxXtrwSz3p0EWb_m6ggAMgkCBBw&callback=initMap"
+    async defer></script>
+  </body>
+</html>
